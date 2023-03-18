@@ -1,4 +1,11 @@
+import { Box } from "@mui/material";
+import RegisterForm from "../components/auth/RegisterForm";
+
 function RegisterPage() {
-  return <div>RegisterPage</div>;
+  return (
+    <Box py={5}>
+      <RegisterForm />
+    </Box>
+  );
 }
 export default RegisterPage;

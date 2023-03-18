@@ -17,8 +17,8 @@ function Features() {
       >
         Features
       </Typography>
-      <Box mt={10}>
-        <Grid container spacing={6}>
+      <Box mt={5}>
+        <Grid container spacing={3}>
           <Grid item xs={12} md={4}>
             <FeatureItem
               title="Completely Free"
