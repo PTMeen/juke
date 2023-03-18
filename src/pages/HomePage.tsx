@@ -1,10 +1,18 @@
-import { Typography } from "@mui/material";
+import { Box, Stack } from "@mui/material";
+import Features from "../components/home/Features";
+import HomeHero from "../components/home/HomeHero";
+import { useColorModeContext } from "../theme";
 
 function HomePage() {
   return (
-    <div>
-      <Typography variant="h1">Home Page</Typography>
-    </div>
+    <Stack gap={15}>
+      <Box>
+        <HomeHero />
+      </Box>
+      <Box my={15}>
+        <Features />
+      </Box>
+    </Stack>
   );
 }
 export default HomePage;

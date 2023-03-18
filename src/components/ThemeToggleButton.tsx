@@ -1,4 +1,4 @@
-import { Box, IconButton, ButtonGroup, Button } from "@mui/material";
+import { IconButton, ButtonGroup, Button } from "@mui/material";
 import LightModeOutlinedIcon from "@mui/icons-material/LightModeOutlined";
 import DarkModeOutlinedIcon from "@mui/icons-material/DarkModeOutlined";
 import { useColorModeContext } from "../theme";

@@ -35,8 +35,18 @@ export function ColorModeProvider({ children }: { children: any }) {
       ...(mode === "light"
         ? {
             primary: pink,
+            background: {
+              default: "#e2e8f0",
+              paper: "#f1f5f9",
+            },
           }
-        : { primary: pink }),
+        : {
+            primary: pink,
+            background: {
+              default: "#1e293b",
+              paper: "#0f172a",
+            },
+          }),
     },
     typography: {
       h1: {
