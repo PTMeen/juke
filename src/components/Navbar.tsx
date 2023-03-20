@@ -1,15 +1,20 @@
 import { useState } from "react";
 import { Link as RLink } from "react-router-dom";
-import { Box, Link, Stack, useTheme, IconButton } from "@mui/material";
+import {
+  Box,
+  Link,
+  Stack,
+  useTheme,
+  IconButton,
+  Container,
+} from "@mui/material";
 import MenuOpenRoundedIcon from "@mui/icons-material/MenuOpenRounded";
 import { navLinks } from "../constants/navigation";
 import MobileSidebar from "./MobileSidebar";
-import { useColorModeContext } from "../theme";
 import ThemeToggleButton from "./ThemeToggleButton";
 
 function Navbar() {
   const theme = useTheme();
-  const colorMode = useColorModeContext();
   const [isMobileNavbarOpen, setIsMobileNavbarOpen] = useState(false);
 
   const toggleMobileNavbar = () => {
@@ -17,7 +22,16 @@ function Navbar() {
   };
 
   return (
-    <Box py={3}>
+    <Container
+      sx={{
+        position: "fixed",
+        py: 2,
+        left: "50%",
+        transform: "translateX(-50%)",
+        bgcolor: "background.default",
+        zIndex: 10,
+      }}
+    >
       <Stack direction="row" justifyContent="space-between" alignItems="center">
         <Link
           underline="none"
@@ -66,7 +80,7 @@ function Navbar() {
           />
         </Box>
       </Stack>
-    </Box>
+    </Container>
   );
 }
 export default Navbar;
