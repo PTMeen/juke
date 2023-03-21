@@ -9,3 +9,5 @@ export interface LoginFormData {
   email: string;
   password: string;
 }
+
+export type AuthFormStatus = "pending" | "failed" | "success" | "idle";

@@ -6,9 +6,15 @@ import {
   Stack,
   Button,
   Link,
+  Alert,
+  CircularProgress,
 } from "@mui/material";
+import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { useFormik } from "formik";
+import { useState } from "react";
 import { Link as RLink } from "react-router-dom";
+import { useAuthContext } from "../../context/AuthContext";
+import { auth } from "../../firebase";
 import { RegisterFormData } from "../../types/auth";
 import { registerSchema } from "../../utils/formValidation";
 
@@ -16,7 +22,27 @@ import GoogleSigninButton from "./GoogleSigninButton";
 import PasswordInput from "./PasswordInput";
 
 function RegisterForm() {
-  const handleSubmit = (values: RegisterFormData) => {};
+  const [isLoading, setIsLoading] = useState(false);
+  const [registerError, setRegisterError] = useState("");
+
+  const handleSubmit = async (values: RegisterFormData) => {
+    const { email, password, name } = values;
+    setIsLoading(true);
+    setRegisterError("");
+
+    try {
+      const userCredential = await createUserWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
+      await updateProfile(userCredential.user, { displayName: name });
+      setIsLoading(false);
+      setRegisterError("");
+    } catch (error) {
+      setRegisterError("Something went wrong");
+    }
+  };
 
   const formik = useFormik({
     initialValues: {
@@ -40,6 +66,11 @@ function RegisterForm() {
       >
         Register
       </Typography>
+      {(isLoading || registerError) && (
+        <Alert severity={registerError ? "error" : "info"}>
+          {registerError ? registerError : "Signing you up!"}
+        </Alert>
+      )}
       <Box component="form" autoComplete="off" onSubmit={formik.handleSubmit}>
         <Stack spacing={2}>
           <TextField
@@ -87,7 +118,7 @@ function RegisterForm() {
         </Stack>
         <Stack direction="row" mt={4} spacing={1}>
           <Button type="submit" variant="contained" fullWidth size="large">
-            Submit
+            {isLoading ? "Loading..." : "Submit"}
           </Button>
           <GoogleSigninButton />
         </Stack>

@@ -1,8 +1,4 @@
-export const navLinks = [
-  {
-    to: "/manage",
-    label: "Manage",
-  },
+export const unAuthNavLinks = [
   {
     to: "/songs",
     label: "Songs",
@@ -14,5 +10,16 @@ export const navLinks = [
   {
     to: "/auth/register",
     label: "Register",
+  },
+];
+
+export const authedNavLinks = [
+  {
+    to: "/manage",
+    label: "Manage",
+  },
+  {
+    to: "/songs",
+    label: "Songs",
   },
 ];

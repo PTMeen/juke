@@ -6,9 +6,11 @@ import {
   Drawer,
   Typography,
   useMediaQuery,
+  Button,
 } from "@mui/material";
 import { Link as RLink } from "react-router-dom";
-import { navLinks } from "../constants/navigation";
+import { unAuthNavLinks, authedNavLinks } from "../constants/navigation";
+import { useAuthContext } from "../context/AuthContext";
 import CloseButton from "./CloseButton";
 import ThemeToggleButton from "./ThemeToggleButton";
 
@@ -21,6 +23,9 @@ function MobileSidebar({ isOpen, onClose }: IProps) {
   const theme = useTheme();
   const isOnMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
+  const { user, logout } = useAuthContext();
+  const navLinks = user ? authedNavLinks : unAuthNavLinks;
+
   return (
     <Drawer anchor="right" open={isOpen && isOnMobile} onClose={onClose}>
       <Box width="250px" p={3} pr={0}>
@@ -32,10 +37,12 @@ function MobileSidebar({ isOpen, onClose }: IProps) {
             <CloseButton onClick={onClose} />
           </Box>
         </Stack>
+
         <Box pr={3} my={5}>
           <Typography gutterBottom>Select Theme</Typography>
           <ThemeToggleButton isSingle={false} />
         </Box>
+
         <Box>
           <Stack direction="column" justifyContent="center" gap={3}>
             {navLinks.map((navLink) => {
@@ -66,6 +73,14 @@ function MobileSidebar({ isOpen, onClose }: IProps) {
             })}
           </Stack>
         </Box>
+
+        {user && (
+          <Box mt={4} pr={3}>
+            <Button variant="contained" fullWidth onClick={logout}>
+              Logout
+            </Button>
+          </Box>
+        )}
       </Box>
     </Drawer>
   );

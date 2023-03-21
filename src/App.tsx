@@ -9,6 +9,7 @@ import LoginPage from "./pages/LoginPage";
 import { ColorModeProvider } from "./theme";
 import ManagePage from "./pages/ManagePage";
 import AllSongsPage from "./pages/AllSongsPage";
+import PrivateRoute from "./pages/PrivateRoute";
 
 const router = createBrowserRouter([
   {
@@ -21,7 +22,16 @@ const router = createBrowserRouter([
     path: "/manage",
     element: <DefaultLayout />,
     errorElement: <ErrorPage />,
-    children: [{ index: true, element: <ManagePage /> }],
+    children: [
+      {
+        index: true,
+        element: (
+          <PrivateRoute>
+            <ManagePage />
+          </PrivateRoute>
+        ),
+      },
+    ],
   },
   {
     path: "/songs",

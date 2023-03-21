@@ -6,17 +6,37 @@ import {
   Stack,
   Button,
   Link,
+  Alert,
 } from "@mui/material";
 import { Link as RLink } from "react-router-dom";
 import { useFormik } from "formik";
 
 import GoogleSigninButton from "./GoogleSigninButton";
 import PasswordInput from "./PasswordInput";
-import { LoginFormData } from "../../types/auth";
+import { AuthFormStatus, LoginFormData } from "../../types/auth";
 import { loginSchema } from "../../utils/formValidation";
+import { useAuthContext } from "../../context/AuthContext";
+import { useState } from "react";
+import { signInWithEmailAndPassword, updateProfile } from "firebase/auth";
+import { auth } from "../../firebase";
 
 function LoginForm() {
-  const handleSubmit = (values: LoginFormData) => {};
+  const [isLoading, setIsLoading] = useState(false);
+  const [loginError, setLoginError] = useState<any>("");
+
+  const handleSubmit = async (values: LoginFormData) => {
+    const { email, password } = values;
+    setLoginError("");
+    setIsLoading(true);
+
+    try {
+      await signInWithEmailAndPassword(auth, email, password);
+      setIsLoading(false);
+      setLoginError("");
+    } catch (error) {
+      setLoginError("Incorrect email or password");
+    }
+  };
 
   const formik = useFormik({
     initialValues: {
@@ -26,6 +46,7 @@ function LoginForm() {
     validationSchema: loginSchema,
     onSubmit: handleSubmit,
   });
+
   return (
     <Paper sx={{ px: 3, py: 5, maxWidth: "500px", mx: "auto" }} elevation={3}>
       <Typography
@@ -37,6 +58,11 @@ function LoginForm() {
       >
         Login
       </Typography>
+      {(isLoading || loginError) && (
+        <Alert sx={{ my: 2 }} severity={loginError ? "error" : "info"}>
+          {loginError ? loginError : "Logging you in..."}
+        </Alert>
+      )}
       <Box component="form" autoComplete="off" onSubmit={formik.handleSubmit}>
         <Stack spacing={2}>
           <TextField
@@ -61,7 +87,7 @@ function LoginForm() {
         </Stack>
         <Stack direction="row" mt={4} spacing={1}>
           <Button type="submit" variant="contained" fullWidth size="large">
-            Submit
+            {isLoading ? "Loading..." : "Submit"}
           </Button>
           <GoogleSigninButton />
         </Stack>
