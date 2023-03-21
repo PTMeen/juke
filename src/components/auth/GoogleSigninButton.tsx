@@ -5,6 +5,7 @@ function GoogleSigninButton() {
   return (
     <Tooltip title="Sign in with Google" arrow placement="top">
       <IconButton
+        type="button"
         color="primary"
         sx={(theme) => ({
           border: `2px solid ${theme.palette.primary.main}`,

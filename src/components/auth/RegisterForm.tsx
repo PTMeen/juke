@@ -7,11 +7,28 @@ import {
   Button,
   Link,
 } from "@mui/material";
+import { useFormik } from "formik";
 import { Link as RLink } from "react-router-dom";
+import { RegisterFormData } from "../../types/auth";
+import { registerSchema } from "../../utils/formValidation";
+
 import GoogleSigninButton from "./GoogleSigninButton";
 import PasswordInput from "./PasswordInput";
 
 function RegisterForm() {
+  const handleSubmit = (values: RegisterFormData) => {};
+
+  const formik = useFormik({
+    initialValues: {
+      name: "",
+      email: "",
+      password: "",
+      confirmPassword: "",
+    },
+    validationSchema: registerSchema,
+    onSubmit: handleSubmit,
+  });
+
   return (
     <Paper sx={{ px: 3, py: 5, maxWidth: "500px", mx: "auto" }} elevation={3}>
       <Typography
@@ -23,30 +40,53 @@ function RegisterForm() {
       >
         Register
       </Typography>
-      <Box component="form" autoComplete="off">
+      <Box component="form" autoComplete="off" onSubmit={formik.handleSubmit}>
         <Stack spacing={2}>
           <TextField
             fullWidth
             label="Name"
             variant="filled"
-            helperText="Other users will see this name when you upload songs."
+            name="name"
+            value={formik.values.name}
+            onChange={formik.handleChange}
+            error={formik.touched.name && Boolean(formik.errors.name)}
+            helperText={formik.touched.name && formik.errors.name}
           />
           <TextField
             fullWidth
             type="email"
             label="Email"
-            helperText="We will not share your email with anyone"
+            name="email"
             variant="filled"
+            value={formik.values.email}
+            onChange={formik.handleChange}
+            error={formik.touched.email && Boolean(formik.errors.email)}
+            helperText={formik.touched.email && formik.errors.email}
           />
-          <PasswordInput label="Password" value="123" onChange={() => {}} />
+          <PasswordInput
+            label="Password"
+            name="password"
+            value={formik.values.password}
+            onChange={formik.handleChange}
+            error={formik.touched.password && Boolean(formik.errors.password)}
+            helperText={formik.touched.password && formik.errors.password}
+          />
           <PasswordInput
             label="Confirm Password"
-            value="123"
-            onChange={() => {}}
+            name="confirmPassword"
+            value={formik.values.confirmPassword}
+            onChange={formik.handleChange}
+            error={
+              formik.touched.confirmPassword &&
+              Boolean(formik.errors.confirmPassword)
+            }
+            helperText={
+              formik.touched.confirmPassword && formik.errors.confirmPassword
+            }
           />
         </Stack>
         <Stack direction="row" mt={4} spacing={1}>
-          <Button variant="contained" fullWidth size="large">
+          <Button type="submit" variant="contained" fullWidth size="large">
             Submit
           </Button>
           <GoogleSigninButton />

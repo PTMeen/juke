@@ -8,10 +8,24 @@ import {
   Link,
 } from "@mui/material";
 import { Link as RLink } from "react-router-dom";
+import { useFormik } from "formik";
+
 import GoogleSigninButton from "./GoogleSigninButton";
 import PasswordInput from "./PasswordInput";
+import { LoginFormData } from "../../types/auth";
+import { loginSchema } from "../../utils/formValidation";
 
 function LoginForm() {
+  const handleSubmit = (values: LoginFormData) => {};
+
+  const formik = useFormik({
+    initialValues: {
+      email: "",
+      password: "",
+    },
+    validationSchema: loginSchema,
+    onSubmit: handleSubmit,
+  });
   return (
     <Paper sx={{ px: 3, py: 5, maxWidth: "500px", mx: "auto" }} elevation={3}>
       <Typography
@@ -23,19 +37,30 @@ function LoginForm() {
       >
         Login
       </Typography>
-      <Box component="form" autoComplete="off">
+      <Box component="form" autoComplete="off" onSubmit={formik.handleSubmit}>
         <Stack spacing={2}>
           <TextField
             fullWidth
             type="email"
             label="Email"
-            helperText="We will not share your email with anyone"
+            name="email"
             variant="filled"
+            value={formik.values.email}
+            onChange={formik.handleChange}
+            error={formik.touched.email && Boolean(formik.errors.email)}
+            helperText={formik.touched.email && formik.errors.email}
           />
-          <PasswordInput label="Password" value="123" onChange={() => {}} />
+          <PasswordInput
+            label="Password"
+            name="password"
+            value={formik.values.password}
+            onChange={formik.handleChange}
+            error={formik.touched.password && Boolean(formik.errors.password)}
+            helperText={formik.touched.password && formik.errors.password}
+          />
         </Stack>
         <Stack direction="row" mt={4} spacing={1}>
-          <Button variant="contained" fullWidth size="large">
+          <Button type="submit" variant="contained" fullWidth size="large">
             Submit
           </Button>
           <GoogleSigninButton />
