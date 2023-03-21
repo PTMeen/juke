@@ -4,6 +4,7 @@ import SongListItem from "./SongListItem";
 
 interface IProps {
   songs: Song[];
+  editable?: boolean;
 }
 
 function SongsList({ songs }: IProps) {

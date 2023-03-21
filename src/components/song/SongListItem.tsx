@@ -1,6 +1,7 @@
 import {
   Box,
   Button,
+  Chip,
   Divider,
   IconButton,
   Paper,
@@ -29,7 +30,12 @@ function SongListItem({ title, url, artist, cover, genres, uploadedBy }: Song) {
       <Stack direction="row" spacing={2}>
         <SongAvatar title={title} coverUrl={cover} />
         <Box>
-          <Typography variant="h6">{title}</Typography>
+          <Stack direction="row" alignItems="center" spacing={1}>
+            <Typography variant="h6">{title}</Typography>
+            {genres?.length && (
+              <Chip label={genres[0]} size="small" variant="outlined" />
+            )}
+          </Stack>
           <Typography
             sx={(theme) => ({ color: theme.palette.text.secondary })}
             fontWeight="bold"

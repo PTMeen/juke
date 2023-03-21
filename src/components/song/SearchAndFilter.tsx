@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import {
   Paper,
   Typography,
@@ -16,36 +16,25 @@ import {
   useMediaQuery,
 } from "@mui/material";
 import FilterListRoundedIcon from "@mui/icons-material/FilterListRounded";
-import SearchRoundedIcon from "@mui/icons-material/SearchRounded";
+import { FilterOptions } from "../../types/song";
 
-function SearchAndFilter() {
-  const theme = useTheme();
-  const isOnBigScreen = useMediaQuery(theme.breakpoints.up("sm"));
-
-  const [formData, setFormData] = useState({
-    title: "",
-    artist: "",
-    genre: "all",
-    sort: "title",
-  });
-
-  const handleFormChange = (
+interface IProps {
+  filterOptions: FilterOptions;
+  onFilterOptionChange: (
     e:
       | React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
       | SelectChangeEvent
-  ): void => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
-  };
+  ) => void;
+  onClearFilterOptions: () => void;
+}
 
-  const handleClearFilter = () => {
-    setFormData({
-      title: "",
-      artist: "",
-      genre: "all",
-      sort: "title",
-    });
-  };
+function SearchAndFilter({
+  filterOptions,
+  onClearFilterOptions,
+  onFilterOptionChange,
+}: IProps) {
+  const theme = useTheme();
+  const isOnBigScreen = useMediaQuery(theme.breakpoints.up("sm"));
 
   return (
     <Paper sx={{ p: 4, borderRadius: 5 }} elevation={4}>
@@ -54,7 +43,12 @@ function SearchAndFilter() {
           Sort & Filter
         </Typography>
       </Box>
-      <Box component="form" autoComplete="off" mt={3}>
+      <Box
+        component="form"
+        autoComplete="off"
+        mt={3}
+        onSubmit={(e) => e.preventDefault()}
+      >
         <Grid container spacing={2}>
           <Grid item xs={12} md={6}>
             <TextField
@@ -64,8 +58,8 @@ function SearchAndFilter() {
               variant="filled"
               fullWidth
               name="title"
-              value={formData.title}
-              onChange={handleFormChange}
+              value={filterOptions.title}
+              onChange={onFilterOptionChange}
             />
           </Grid>
           <Grid item xs={12} md={6}>
@@ -75,8 +69,8 @@ function SearchAndFilter() {
               variant="filled"
               fullWidth
               name="artist"
-              value={formData.artist}
-              onChange={handleFormChange}
+              value={filterOptions.artist}
+              onChange={onFilterOptionChange}
             />
           </Grid>
           <Grid item xs={12} md={6}>
@@ -85,9 +79,9 @@ function SearchAndFilter() {
               <Select
                 label="Genre"
                 name="genre"
-                defaultValue={formData.genre}
-                onChange={handleFormChange}
-                value={formData.genre}
+                defaultValue={filterOptions.genre}
+                onChange={onFilterOptionChange}
+                value={filterOptions.genre}
                 size="small"
               >
                 <MenuItem value="all">All</MenuItem>
@@ -104,9 +98,9 @@ function SearchAndFilter() {
                 label="Sort"
                 name="sort"
                 size="small"
-                defaultValue={formData.sort}
-                value={formData.sort}
-                onChange={handleFormChange}
+                defaultValue={filterOptions.sort}
+                value={filterOptions.sort}
+                onChange={onFilterOptionChange}
               >
                 <MenuItem value="title">Title</MenuItem>
                 <MenuItem value="uploadedDate">Uploaded Date</MenuItem>
@@ -114,23 +108,16 @@ function SearchAndFilter() {
             </FormControl>
           </Grid>
         </Grid>
-        <Stack direction="row" mt={4} spacing={2}>
+        <Box mt={4} sx={{ textAlign: { xs: "center", sm: "left" } }}>
           <Button
-            variant="contained"
+            type="button"
             size={isOnBigScreen ? "medium" : "small"}
-            endIcon={<FilterListRoundedIcon />}
-            sx={{ width: { xs: "50%", md: "fit-content" } }}
-          >
-            Filter
-          </Button>
-          <Button
-            size={isOnBigScreen ? "medium" : "small"}
-            onClick={handleClearFilter}
+            onClick={onClearFilterOptions}
             sx={{ width: { xs: "50%", md: "fit-content" } }}
           >
             Clear Filters
           </Button>
-        </Stack>
+        </Box>
       </Box>
     </Paper>
   );
