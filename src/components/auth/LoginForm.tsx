@@ -6,7 +6,7 @@ import {
   Stack,
   Button,
   Link,
-  Alert,
+  Fade,
 } from "@mui/material";
 import { Link as RLink } from "react-router-dom";
 import { useFormik } from "formik";
@@ -15,26 +15,26 @@ import GoogleSigninButton from "./GoogleSigninButton";
 import PasswordInput from "./PasswordInput";
 import { AuthFormStatus, LoginFormData } from "../../types/auth";
 import { loginSchema } from "../../utils/formValidation";
-import { useAuthContext } from "../../context/AuthContext";
 import { useState } from "react";
 import { signInWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { auth } from "../../firebase";
+import AuthFormAlert from "./AuthFormAlert";
 
 function LoginForm() {
-  const [isLoading, setIsLoading] = useState(false);
-  const [loginError, setLoginError] = useState<any>("");
+  const [loginStatus, setLoginStatus] = useState<AuthFormStatus>("idle");
+  const [loginError, setLoginError] = useState("");
 
   const handleSubmit = async (values: LoginFormData) => {
     const { email, password } = values;
-    setLoginError("");
-    setIsLoading(true);
 
+    setLoginError("");
+    setLoginStatus("pending");
     try {
       await signInWithEmailAndPassword(auth, email, password);
-      setIsLoading(false);
-      setLoginError("");
+      setLoginStatus("success");
     } catch (error) {
       setLoginError("Incorrect email or password");
+      setLoginStatus("error");
     }
   };
 
@@ -47,6 +47,8 @@ function LoginForm() {
     onSubmit: handleSubmit,
   });
 
+  const showFormAlert: boolean = loginStatus !== "idle" || Boolean(loginError);
+
   return (
     <Paper sx={{ px: 3, py: 5, maxWidth: "500px", mx: "auto" }} elevation={3}>
       <Typography
@@ -58,10 +60,17 @@ function LoginForm() {
       >
         Login
       </Typography>
-      {(isLoading || loginError) && (
-        <Alert sx={{ my: 2 }} severity={loginError ? "error" : "info"}>
-          {loginError ? loginError : "Logging you in..."}
-        </Alert>
+      {showFormAlert && (
+        <Fade in={showFormAlert}>
+          <Box my={3}>
+            <AuthFormAlert
+              status={loginStatus}
+              pendingMessage="Logging you in..."
+              successMessage="Login success"
+              errorMessage={loginError}
+            />
+          </Box>
+        </Fade>
       )}
       <Box component="form" autoComplete="off" onSubmit={formik.handleSubmit}>
         <Stack spacing={2}>
@@ -86,8 +95,14 @@ function LoginForm() {
           />
         </Stack>
         <Stack direction="row" mt={4} spacing={1}>
-          <Button type="submit" variant="contained" fullWidth size="large">
-            {isLoading ? "Loading..." : "Submit"}
+          <Button
+            type="submit"
+            variant="contained"
+            fullWidth
+            size="large"
+            disabled={loginStatus === "pending"}
+          >
+            {loginStatus === "pending" ? "Loading..." : "Submit"}
           </Button>
           <GoogleSigninButton />
         </Stack>

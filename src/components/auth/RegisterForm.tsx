@@ -6,8 +6,7 @@ import {
   Stack,
   Button,
   Link,
-  Alert,
-  CircularProgress,
+  Fade,
 } from "@mui/material";
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { useFormik } from "formik";
@@ -15,21 +14,22 @@ import { useState } from "react";
 import { Link as RLink } from "react-router-dom";
 import { useAuthContext } from "../../context/AuthContext";
 import { auth } from "../../firebase";
-import { RegisterFormData } from "../../types/auth";
+import { AuthFormStatus, RegisterFormData } from "../../types/auth";
 import { registerSchema } from "../../utils/formValidation";
+import AuthFormAlert from "./AuthFormAlert";
 
 import GoogleSigninButton from "./GoogleSigninButton";
 import PasswordInput from "./PasswordInput";
 
 function RegisterForm() {
-  const [isLoading, setIsLoading] = useState(false);
+  const [registerStatus, setRegisterStatus] = useState<AuthFormStatus>("idle");
   const [registerError, setRegisterError] = useState("");
 
   const handleSubmit = async (values: RegisterFormData) => {
     const { email, password, name } = values;
-    setIsLoading(true);
-    setRegisterError("");
 
+    setRegisterError("");
+    setRegisterStatus("pending");
     try {
       const userCredential = await createUserWithEmailAndPassword(
         auth,
@@ -37,10 +37,10 @@ function RegisterForm() {
         password
       );
       await updateProfile(userCredential.user, { displayName: name });
-      setIsLoading(false);
-      setRegisterError("");
+      setRegisterStatus("success");
     } catch (error) {
       setRegisterError("Something went wrong");
+      setRegisterStatus("error");
     }
   };
 
@@ -55,6 +55,9 @@ function RegisterForm() {
     onSubmit: handleSubmit,
   });
 
+  const showFormAlert: boolean =
+    registerStatus !== "idle" || Boolean(registerError);
+
   return (
     <Paper sx={{ px: 3, py: 5, maxWidth: "500px", mx: "auto" }} elevation={3}>
       <Typography
@@ -66,10 +69,17 @@ function RegisterForm() {
       >
         Register
       </Typography>
-      {(isLoading || registerError) && (
-        <Alert severity={registerError ? "error" : "info"}>
-          {registerError ? registerError : "Signing you up!"}
-        </Alert>
+      {showFormAlert && (
+        <Fade in={showFormAlert}>
+          <Box my={3}>
+            <AuthFormAlert
+              status={registerStatus}
+              pendingMessage="Creating your account..."
+              successMessage="Register success"
+              errorMessage={registerError}
+            />
+          </Box>
+        </Fade>
       )}
       <Box component="form" autoComplete="off" onSubmit={formik.handleSubmit}>
         <Stack spacing={2}>
@@ -118,7 +128,7 @@ function RegisterForm() {
         </Stack>
         <Stack direction="row" mt={4} spacing={1}>
           <Button type="submit" variant="contained" fullWidth size="large">
-            {isLoading ? "Loading..." : "Submit"}
+            submit
           </Button>
           <GoogleSigninButton />
         </Stack>
