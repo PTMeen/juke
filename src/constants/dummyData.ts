@@ -94,8 +94,6 @@ const dummySongs: Song[] = [
     uploadedAt: "2023-03-20T07:52:55.034Z",
     uploadedBy: "Meen",
     url: "",
-    cover:
-      "https://d1csarkz8obe9u.cloudfront.net/posterpreviews/sphere-glass-the-mixtape-cd-cover-design-template-73ab5b3d9b81f442cb2288630ab63acf.jpg?ts=1602178819",
   },
   {
     id: "s9",

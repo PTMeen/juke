@@ -1,9 +1,8 @@
 export interface Song {
-  id: string;
   title: string;
   uid: string;
   artist: string;
-  genres: string[];
+  genre: string;
   uploadedAt: string;
   uploadedBy: string;
   url: string;

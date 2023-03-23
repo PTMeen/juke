@@ -18,6 +18,13 @@ function SongAvatar({
     );
   }
 
-  return <Avatar sx={{ width: 150, height: 150 }}>{title[0]}</Avatar>;
+  return (
+    <Avatar
+      variant="rounded"
+      sx={{ width: 100, height: 100, bgcolor: "primary.main", color: "white" }}
+    >
+      {title[0]}
+    </Avatar>
+  );
 }
 export default SongAvatar;

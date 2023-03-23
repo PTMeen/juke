@@ -1,4 +1,4 @@
-import { Box, SelectChangeEvent } from "@mui/material";
+import { Box, SelectChangeEvent, Typography } from "@mui/material";
 import { useState } from "react";
 import SearchAndFilter from "../components/song/SearchAndFilter";
 import SongsList from "../components/song/SongsList";
@@ -73,6 +73,12 @@ function AllSongsPage() {
         />
       </Box>
       <Box component="section">
+        <Box mb={4}>
+          <Typography variant="h6" component="h2">
+            {filteredSongs.length}{" "}
+            {filteredSongs.length === 1 ? "Song" : "Songs"} Found
+          </Typography>
+        </Box>
         <SongsList songs={filteredSongs} />
       </Box>
     </Box>

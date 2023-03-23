@@ -15,7 +15,7 @@ import ChatBubbleOutlineRoundedIcon from "@mui/icons-material/ChatBubbleOutlineR
 import { Song } from "../../types/song";
 import SongAvatar from "./SongAvatar";
 
-function SongListItem({ title, url, artist, cover, genres, uploadedBy }: Song) {
+function SongListItem({ title, url, artist, cover, genre, uploadedBy }: Song) {
   return (
     <Paper
       sx={{
@@ -31,18 +31,20 @@ function SongListItem({ title, url, artist, cover, genres, uploadedBy }: Song) {
         <SongAvatar title={title} coverUrl={cover} />
         <Box>
           <Stack direction="row" alignItems="center" spacing={1}>
-            <Typography variant="h6">{title}</Typography>
-            {genres?.length && (
-              <Chip label={genres[0]} size="small" variant="outlined" />
-            )}
+            <Typography variant="h6" gutterBottom>
+              {title}
+            </Typography>
           </Stack>
-          <Typography
-            sx={(theme) => ({ color: theme.palette.text.secondary })}
-            fontWeight="bold"
-            variant="subtitle2"
-          >
-            {artist}
-          </Typography>
+          <Stack direction="row" gap={1}>
+            <Typography
+              sx={(theme) => ({ color: theme.palette.text.secondary })}
+              fontWeight="bold"
+              variant="subtitle2"
+            >
+              {artist}
+            </Typography>
+            {genre && <Chip label={genre} size="small" variant="outlined" />}
+          </Stack>
           <Typography
             variant="caption"
             sx={(theme) => ({ color: theme.palette.text.secondary })}

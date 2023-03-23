@@ -30,4 +30,9 @@ const loginSchema = yup.object({
     .required("Password is required"),
 });
 
-export { registerSchema, loginSchema };
+const addSongSchema = yup.object({
+  title: yup.string().required("Title required"),
+  artist: yup.string().required("Artist name required"),
+});
+
+export { registerSchema, loginSchema, addSongSchema };
