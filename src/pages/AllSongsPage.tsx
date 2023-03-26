@@ -3,11 +3,12 @@ import { useState } from "react";
 import SearchAndFilter from "../components/song/SearchAndFilter";
 import SongsList from "../components/song/SongsList";
 import { dummySongs } from "../constants/dummyData";
+import { useAppSelector } from "../store/store";
 import { FilterOptions } from "../types/song";
 import { sortSongsByTitle, sortSongsByUploadedDate } from "../utils/sort";
 
 function AllSongsPage() {
-  const [songs, setSongs] = useState(dummySongs);
+  const { songs, isLoading } = useAppSelector((state) => state.songs);
   const [filterOptions, setFilterOptions] = useState<FilterOptions>({
     title: "",
     artist: "",
@@ -37,12 +38,12 @@ function AllSongsPage() {
     const { artist, genre, sort, title } = filterOptions;
     let selectedSongs =
       sort === "title"
-        ? sortSongsByTitle(songs)
-        : sortSongsByUploadedDate(songs);
+        ? sortSongsByTitle([...songs])
+        : sortSongsByUploadedDate([...songs]);
 
     if (genre && genre !== "all") {
       selectedSongs = selectedSongs.filter((song) => {
-        return song.genres.includes(genre);
+        return song.genre.includes(genre);
       });
     }
 
@@ -59,6 +60,12 @@ function AllSongsPage() {
     }
 
     return selectedSongs;
+  }
+
+  // const filteredSongs = filterSong();
+
+  if (isLoading) {
+    return <h1>Loading...</h1>;
   }
 
   const filteredSongs = filterSong();
