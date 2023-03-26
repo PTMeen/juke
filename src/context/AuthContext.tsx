@@ -4,6 +4,7 @@ import {
   signInWithRedirect,
   User,
   signOut,
+  UserInfo,
 } from "firebase/auth";
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { auth } from "../firebase";
@@ -11,18 +12,17 @@ import { auth } from "../firebase";
 interface AuthContextType {
   googleSignin: () => void;
   logout: () => void;
-
-  user: User | {};
+  user: User | null | undefined;
 }
 
 const AuthContext = createContext<AuthContextType>({
   googleSignin: () => {},
-  user: {},
+  user: undefined,
   logout: () => {},
 });
 
 const AuthContextProvider = ({ children }: { children: React.ReactNode }) => {
-  const [user, setUser] = useState<any>({});
+  const [user, setUser] = useState<User | null | undefined>(undefined);
 
   const googleSignin = () => {
     const provider = new GoogleAuthProvider();
