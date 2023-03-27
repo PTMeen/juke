@@ -1,8 +1,8 @@
 import { Box, SelectChangeEvent, Typography } from "@mui/material";
-import { useState } from "react";
+import { useState, Suspense } from "react";
 import SearchAndFilter from "../components/song/SearchAndFilter";
+import SongListSkeleton from "../components/song/SongListSkeleton";
 import SongsList from "../components/song/SongsList";
-import { dummySongs } from "../constants/dummyData";
 import { useAppSelector } from "../store/store";
 import { FilterOptions } from "../types/song";
 import { sortSongsByTitle, sortSongsByUploadedDate } from "../utils/sort";
@@ -62,12 +62,6 @@ function AllSongsPage() {
     return selectedSongs;
   }
 
-  // const filteredSongs = filterSong();
-
-  if (isLoading) {
-    return <h1>Loading...</h1>;
-  }
-
   const filteredSongs = filterSong();
 
   return (
@@ -86,7 +80,7 @@ function AllSongsPage() {
             {filteredSongs.length === 1 ? "Song" : "Songs"} Found
           </Typography>
         </Box>
-        <SongsList songs={filteredSongs} />
+        {isLoading ? <SongListSkeleton /> : <SongsList songs={filteredSongs} />}
       </Box>
     </Box>
   );

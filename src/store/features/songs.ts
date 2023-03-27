@@ -1,7 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
-import { collection } from "firebase/firestore";
-import { getDocs } from "firebase/firestore";
+import { collection, query, where, getDocs } from "firebase/firestore";
 
 import { Song } from "../../types/song";
 import { db } from "../../firebase";
@@ -36,6 +35,26 @@ export const fetchSongs = createAsyncThunk(
   }
 );
 
+export const fetchMySongs = createAsyncThunk(
+  "songs/fetchMySongs",
+  async (uid: string, thunkApi) => {
+    try {
+      const songsCollection = collection(db, "songs");
+      const q = query(songsCollection, where("uid", "==", uid));
+      const querySnapshot = await getDocs(q);
+      const songs = querySnapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      })) as Song[];
+      return { songs };
+    } catch (error) {
+      return thunkApi.rejectWithValue({
+        errorMessage: "Failed to fetched your songs",
+      });
+    }
+  }
+);
+
 const songsSlice = createSlice({
   name: "songs",
   initialState,
@@ -60,3 +79,4 @@ const songsSlice = createSlice({
 });
 
 export default songsSlice.reducer;
+export const useSongsSelector = () => useAppSelector((state) => state.songs);

@@ -4,7 +4,7 @@ import { useAuthContext } from "../context/AuthContext";
 function PrivateRoute({ children }: { children: React.ReactNode }): any {
   const { user } = useAuthContext();
 
-  if (!user) {
+  if (user === null) {
     return <Navigate to="/" />;
   }
 

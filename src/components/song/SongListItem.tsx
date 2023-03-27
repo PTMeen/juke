@@ -11,11 +11,25 @@ import {
 } from "@mui/material";
 import PlayCircleOutlineRoundedIcon from "@mui/icons-material/PlayCircleOutlineRounded";
 import ChatBubbleOutlineRoundedIcon from "@mui/icons-material/ChatBubbleOutlineRounded";
+import { formatDistance } from "date-fns";
 
 import { Song } from "../../types/song";
 import SongAvatar from "./SongAvatar";
 
-function SongListItem({ title, url, artist, cover, genre, uploadedBy }: Song) {
+function SongListItem({
+  title,
+  url,
+  artist,
+  cover,
+  genre,
+  uploadedBy,
+  uploadedAt,
+}: Song) {
+  const presentDay = new Date();
+  const uploadedDate = new Date(uploadedAt);
+
+  const uploadDateText = `${formatDistance(presentDay, uploadedDate)} ago`;
+
   return (
     <Paper
       sx={{
@@ -49,7 +63,7 @@ function SongListItem({ title, url, artist, cover, genre, uploadedBy }: Song) {
             variant="caption"
             sx={(theme) => ({ color: theme.palette.text.secondary })}
           >
-            uploaded by {uploadedBy}
+            uploaded by {uploadedBy} - {uploadDateText}
           </Typography>
           <Box my={2}></Box>
         </Box>
