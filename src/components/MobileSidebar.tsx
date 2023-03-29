@@ -11,6 +11,8 @@ import {
 import { Link as RLink } from "react-router-dom";
 import { unAuthNavLinks, authedNavLinks } from "../constants/navigation";
 import { useAuthContext } from "../context/AuthContext";
+import { resetMySongs } from "../store/features/mySongs";
+import { useAppDispatch } from "../store/store";
 import CloseButton from "./CloseButton";
 import ThemeToggleButton from "./ThemeToggleButton";
 
@@ -22,9 +24,19 @@ interface IProps {
 function MobileSidebar({ isOpen, onClose }: IProps) {
   const theme = useTheme();
   const isOnMobile = useMediaQuery(theme.breakpoints.down("sm"));
+  const dispatch = useAppDispatch();
 
   const { user, logout } = useAuthContext();
   const navLinks = user ? authedNavLinks : unAuthNavLinks;
+
+  const handleLogout = async () => {
+    try {
+      await logout();
+      dispatch(resetMySongs());
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <Drawer anchor="right" open={isOpen && isOnMobile} onClose={onClose}>
@@ -76,7 +88,7 @@ function MobileSidebar({ isOpen, onClose }: IProps) {
 
         {user && (
           <Box mt={4} pr={3}>
-            <Button variant="contained" fullWidth onClick={logout}>
+            <Button variant="contained" fullWidth onClick={handleLogout}>
               Logout
             </Button>
           </Box>

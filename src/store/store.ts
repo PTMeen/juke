@@ -4,10 +4,12 @@ import { useSelector } from "react-redux";
 import { TypedUseSelectorHook } from "react-redux";
 
 import songsReducer from "./features/songs";
+import mySongsReducer from "./features/mySongs";
 
 export const store = configureStore({
   reducer: {
     songs: songsReducer,
+    mySongs: mySongsReducer,
   },
 });
 

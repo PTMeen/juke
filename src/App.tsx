@@ -1,5 +1,4 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import { useDispatch } from "react-redux";
 
 import HomePage from "./pages/HomePage";
 import SongPage from "./pages/SongPage";
@@ -14,6 +13,8 @@ import PrivateRoute from "./pages/PrivateRoute";
 import { useEffect } from "react";
 import { fetchSongs } from "./store/features/songs";
 import { useAppDispatch } from "./store/store";
+import { useAuthContext } from "./context/AuthContext";
+import { fetchUserSongs } from "./store/features/mySongs";
 
 const router = createBrowserRouter([
   {
@@ -65,10 +66,17 @@ const router = createBrowserRouter([
 
 function App() {
   const dispatch = useAppDispatch();
+  const { user } = useAuthContext();
 
   useEffect(() => {
     dispatch(fetchSongs());
   }, []);
+
+  useEffect(() => {
+    if (user?.uid) {
+      dispatch(fetchUserSongs(user.uid));
+    }
+  }, [user]);
 
   return (
     <ColorModeProvider>

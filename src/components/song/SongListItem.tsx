@@ -9,6 +9,7 @@ import {
   Tooltip,
   Typography,
 } from "@mui/material";
+import { Link as RLink } from "react-router-dom";
 import PlayCircleOutlineRoundedIcon from "@mui/icons-material/PlayCircleOutlineRounded";
 import ChatBubbleOutlineRoundedIcon from "@mui/icons-material/ChatBubbleOutlineRounded";
 import { formatDistance } from "date-fns";
@@ -24,6 +25,7 @@ function SongListItem({
   genre,
   uploadedBy,
   uploadedAt,
+  id,
 }: Song) {
   const presentDay = new Date();
   const uploadedDate = new Date(uploadedAt);
@@ -77,7 +79,7 @@ function SongListItem({
         sx={{ display: { xs: "none", md: "flex" } }}
       >
         <Box>
-          <IconButton size="large">
+          <IconButton size="large" component={RLink} to={`/songs/${id}`}>
             <ChatBubbleOutlineRoundedIcon />
           </IconButton>
         </Box>

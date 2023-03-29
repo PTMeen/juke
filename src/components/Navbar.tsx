@@ -14,9 +14,13 @@ import { authedNavLinks, unAuthNavLinks } from "../constants/navigation";
 import MobileSidebar from "./MobileSidebar";
 import ThemeToggleButton from "./ThemeToggleButton";
 import { useAuthContext } from "../context/AuthContext";
+import { useAppDispatch } from "../store/store";
+import { resetMySongs } from "../store/features/mySongs";
 
 function Navbar() {
   const theme = useTheme();
+  const dispatch = useAppDispatch();
+
   const [isMobileNavbarOpen, setIsMobileNavbarOpen] = useState(false);
 
   const { user, logout } = useAuthContext();
@@ -29,6 +33,7 @@ function Navbar() {
   const handleLogout = async () => {
     try {
       await logout();
+      dispatch(resetMySongs());
     } catch (error) {
       console.log(error);
     }

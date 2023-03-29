@@ -1,5 +1,4 @@
 import {
-  Box,
   Button,
   Card,
   CardActions,
@@ -9,6 +8,7 @@ import {
 } from "@mui/material";
 import { Song } from "../../types/song";
 import { formatDistance } from "date-fns";
+import { Link } from "react-router-dom";
 
 import defaultCover from "../../assets/images/default-music-card.jpg";
 
@@ -33,7 +33,9 @@ function SongCard({ song }: { song: Song }) {
         )} ago`}</Typography>
       </CardContent>
       <CardActions sx={{ display: "flex", justifyContent: "space-evenly" }}>
-        <Button size="small">comments</Button>
+        <Button size="small" component={Link} to={`/songs/${song.id}`}>
+          comments
+        </Button>
         <Button size="small">edit</Button>
         <Button size="small">delete</Button>
       </CardActions>
