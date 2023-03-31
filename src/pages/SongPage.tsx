@@ -1,12 +1,27 @@
-import { Box, Typography, Stack } from "@mui/material";
+import {
+  Box,
+  Typography,
+  Stack,
+  Chip,
+  useMediaQuery,
+  Paper,
+  TextareaAutosize,
+  TextField,
+  Button,
+  Divider,
+} from "@mui/material";
 import { collection, doc, getDoc } from "firebase/firestore";
 import { useCallback, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import defaultCoverImg from "../assets/images/default-music-card.jpg";
 import PageSpinner from "../components/PageSpinner";
 import { db } from "../firebase";
 
 import { Song } from "../types/song";
+import SongAvatar from "../components/song/SongAvatar";
+import { formatTimeDistance } from "../utils/time";
+import SendRoundedIcon from "@mui/icons-material/SendRounded";
+import CommentForm from "../components/comment/CommentForm";
+import CommentItem from "../components/comment/CommentItem";
 
 function SongPage() {
   const [song, setSong] = useState<Song | null>(null);
@@ -62,9 +77,75 @@ function SongPage() {
     );
   }
 
+  if (!song) {
+    return (
+      <Box py={6}>
+        <Typography
+          fontWeight="bold"
+          variant="h1"
+          fontSize="3rem"
+          color="primary"
+          textAlign="center"
+        >
+          Song not found
+        </Typography>
+      </Box>
+    );
+  }
+
+  const uploadDateText = formatTimeDistance(song.uploadedAt);
+
   return (
     <Box>
-      <Typography>{song?.title}</Typography>
+      <Box component="section">
+        <Paper sx={{ p: 3 }}>
+          <Stack direction="row" spacing={4}>
+            <Box sx={{ display: { xs: "none", md: "block" } }}>
+              <SongAvatar
+                title={song.title}
+                coverUrl={song.cover}
+                width={200}
+                height={200}
+              />
+            </Box>
+            <Box>
+              <Typography
+                component="h1"
+                variant="h2"
+                gutterBottom
+                sx={{
+                  fontSize: { xs: "1.5rem", sm: "3.5rem" },
+                  fontWeight: "bold",
+                }}
+              >
+                {song.title}
+              </Typography>
+              <Stack direction="row" spacing={2}>
+                <Typography variant="h5" component="p" gutterBottom>
+                  {song.artist}{" "}
+                </Typography>
+                <Chip label={song.genre} size="small" />
+              </Stack>
+              <Typography>
+                Uploaded by {song.uploadedBy} - {uploadDateText}
+              </Typography>
+            </Box>
+          </Stack>
+        </Paper>
+
+        <Box component="section" sx={{ mt: { xs: 4, sm: 8 } }}>
+          <Paper sx={{ p: 3 }}>
+            <Typography component="h2" variant="h5" gutterBottom>
+              Comments
+            </Typography>
+            <CommentForm />
+            <Divider sx={{ mt: 5 }} />
+            <Box mt={2}>
+              <CommentItem />
+            </Box>
+          </Paper>
+        </Box>
+      </Box>
     </Box>
   );
 }

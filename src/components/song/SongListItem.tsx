@@ -12,10 +12,10 @@ import {
 import { Link as RLink } from "react-router-dom";
 import PlayCircleOutlineRoundedIcon from "@mui/icons-material/PlayCircleOutlineRounded";
 import ChatBubbleOutlineRoundedIcon from "@mui/icons-material/ChatBubbleOutlineRounded";
-import { formatDistance } from "date-fns";
 
 import { Song } from "../../types/song";
 import SongAvatar from "./SongAvatar";
+import SongDetails from "./SongDetails";
 
 function SongListItem({
   title,
@@ -27,11 +27,6 @@ function SongListItem({
   uploadedAt,
   id,
 }: Song) {
-  const presentDay = new Date();
-  const uploadedDate = new Date(uploadedAt);
-
-  const uploadDateText = `${formatDistance(presentDay, uploadedDate)} ago`;
-
   return (
     <Paper
       sx={{
@@ -45,30 +40,13 @@ function SongListItem({
     >
       <Stack direction="row" spacing={2}>
         <SongAvatar title={title} coverUrl={cover} />
-        <Box>
-          <Stack direction="row" alignItems="center" spacing={1}>
-            <Typography variant="h6" gutterBottom>
-              {title}
-            </Typography>
-          </Stack>
-          <Stack direction="row" gap={1}>
-            <Typography
-              sx={(theme) => ({ color: theme.palette.text.secondary })}
-              fontWeight="bold"
-              variant="subtitle2"
-            >
-              {artist}
-            </Typography>
-            {genre && <Chip label={genre} size="small" variant="outlined" />}
-          </Stack>
-          <Typography
-            variant="caption"
-            sx={(theme) => ({ color: theme.palette.text.secondary })}
-          >
-            uploaded by {uploadedBy} - {uploadDateText}
-          </Typography>
-          <Box my={2}></Box>
-        </Box>
+        <SongDetails
+          title={title}
+          artist={artist}
+          genre={genre}
+          uploadedAt={uploadedAt}
+          uploadedBy={uploadedBy}
+        />
       </Stack>
 
       {/* big screen buttons */}
