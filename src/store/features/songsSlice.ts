@@ -58,7 +58,11 @@ export const fetchMySongs = createAsyncThunk(
 const songsSlice = createSlice({
   name: "songs",
   initialState,
-  reducers: {},
+  reducers: {
+    addSong: (state, { payload }: { payload: Song }) => {
+      state.songs.unshift(payload);
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(
@@ -78,6 +82,5 @@ const songsSlice = createSlice({
   },
 });
 
+export const { addSong } = songsSlice.actions;
 export default songsSlice.reducer;
-
-export const useSongsSelector = () => useAppSelector((state) => state.songs);

@@ -24,7 +24,7 @@ function ManagePage() {
   }
 
   return (
-    <Box>
+    <Box pb={4}>
       <Box component="section" mb={4}>
         <SongUploader />
       </Box>

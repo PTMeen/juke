@@ -1,5 +1,5 @@
+import { useState } from "react";
 import { Box, SelectChangeEvent, Typography } from "@mui/material";
-import { useState, Suspense } from "react";
 import SearchAndFilter from "../components/song/SearchAndFilter";
 import SongListSkeleton from "../components/song/SongListSkeleton";
 import SongsList from "../components/song/SongsList";

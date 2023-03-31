@@ -3,8 +3,8 @@ import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
 import { TypedUseSelectorHook } from "react-redux";
 
-import songsReducer from "./features/songs";
-import mySongsReducer from "./features/mySongs";
+import songsReducer from "./features/songsSlice";
+import mySongsReducer from "./features/mySongsSlice";
 
 export const store = configureStore({
   reducer: {

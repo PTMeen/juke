@@ -15,7 +15,7 @@ import MobileSidebar from "./MobileSidebar";
 import ThemeToggleButton from "./ThemeToggleButton";
 import { useAuthContext } from "../context/AuthContext";
 import { useAppDispatch } from "../store/store";
-import { resetMySongs } from "../store/features/mySongs";
+import { resetMySongs } from "../store/features/mySongsSlice";
 
 function Navbar() {
   const theme = useTheme();

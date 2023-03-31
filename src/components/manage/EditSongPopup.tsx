@@ -1,8 +1,8 @@
-import { ChangeEvent, useState } from "react";
 import {
   Box,
   Button,
   FormControl,
+  IconButton,
   InputLabel,
   MenuItem,
   Modal,
@@ -11,20 +11,18 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import AddRoundedIcon from "@mui/icons-material/AddRounded";
-import FileUploadRoundedIcon from "@mui/icons-material/FileUploadRounded";
-import { v4 as uuidv4 } from "uuid";
+import EditRoundedIcon from "@mui/icons-material/EditRounded";
+import { ChangeEvent, useState } from "react";
 import { useFormik } from "formik";
-import { doc, setDoc } from "firebase/firestore";
-
-import { db, auth } from "../../firebase";
-import CloseButton from "../CloseButton";
 import { addSongSchema } from "../../utils/formValidation";
-import AudioUpload from "./AudioUpload";
+import CloseButton from "../CloseButton";
 import ThumbnailUploader from "./ThumbnailUploader";
+import AudioUpload from "./AudioUpload";
+import ModeEditOutlineRoundedIcon from "@mui/icons-material/ModeEditOutlineRounded";
 import { useAppDispatch } from "../../store/store";
-import { addMySong } from "../../store/features/mySongsSlice";
-import { addSong } from "../../store/features/songsSlice";
+import { db } from "../../firebase";
+import { doc, updateDoc } from "firebase/firestore";
+import { Song } from "../../types/song";
 import { uploadAudio, uploadThumbnail } from "../../utils/uplaod";
 
 const style = {
@@ -40,12 +38,16 @@ const style = {
   borderRadius: "8px",
 };
 
-function SongUploader() {
+interface Props {
+  song: Song;
+}
+
+function EditSongPopup({ song }: Props) {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [genre, setGenre] = useState("pop");
+  const [genre, setGenre] = useState(song?.genre ?? "pop");
   const [file, setFile] = useState<File | null>(null);
   const [image, setImage] = useState<File | null>(null);
-  const [isUploading, setIsUploading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const dispatch = useAppDispatch();
 
@@ -53,7 +55,7 @@ function SongUploader() {
     setIsModalOpen(true);
   };
   const closeModal = (): void => {
-    if (isUploading) return;
+    if (isLoading) return;
     setIsModalOpen(false);
   };
 
@@ -72,52 +74,33 @@ function SongUploader() {
   };
 
   const handleSubmit = async (values: { title: string; artist: string }) => {
-    if (!file) return;
-    if (!auth?.currentUser?.uid || !auth?.currentUser?.displayName) return;
-
     const { title, artist } = values;
-    const songId = uuidv4();
 
-    setIsUploading(true);
+    setIsLoading(true);
     try {
-      // upload audio file
-      const songUrl = await uploadAudio(songId, file);
-
-      // upload thumbnail image
-      let thumbnailUrl;
-      if (image) {
-        thumbnailUrl = await uploadThumbnail(songId, image);
+      if (file) {
+        await uploadAudio(song.id, file);
       }
+      if (image) {
+        await uploadThumbnail(song.id, image);
+      }
+      const songRef = doc(db, "songs", song.id);
+      await updateDoc(songRef, { title, artist, genre });
 
-      const newSong = {
-        title,
-        artist,
-        genre,
-        uploadedAt: new Date().toISOString(),
-        uid: auth.currentUser.uid,
-        uploadedBy: auth.currentUser.displayName,
-        url: songUrl,
-        cover: thumbnailUrl || "",
-      };
-
-      const songRef = doc(db, "songs", songId);
-      await setDoc(songRef, newSong);
-      dispatch(addMySong({ id: songId, ...newSong }));
-      dispatch(addSong({ id: songId, ...newSong }));
-
-      setIsUploading(false);
+      setIsLoading(false);
       setIsModalOpen(false);
       resetForm(null);
+      location.reload();
     } catch (error) {
       console.log(error);
-      setIsUploading(false);
+      setIsLoading(false);
     }
   };
 
   const formik = useFormik({
     initialValues: {
-      title: "",
-      artist: "",
+      title: song.title ?? "",
+      artist: song.artist ?? "",
     },
     onSubmit: handleSubmit,
     validationSchema: addSongSchema,
@@ -125,7 +108,7 @@ function SongUploader() {
 
   const resetForm = (e: any) => {
     formik.handleReset(e);
-    setIsUploading(false);
+    setIsLoading(false);
     setFile(null);
     setGenre("pop");
     setImage(null);
@@ -133,15 +116,9 @@ function SongUploader() {
 
   return (
     <>
-      <Box mb={2}>
-        <Button
-          variant="contained"
-          endIcon={<AddRoundedIcon />}
-          onClick={openModal}
-        >
-          Upload song
-        </Button>
-      </Box>
+      <IconButton onClick={openModal}>
+        <EditRoundedIcon />
+      </IconButton>
       <Modal
         open={isModalOpen}
         onClose={closeModal}
@@ -155,9 +132,9 @@ function SongUploader() {
             justifyContent="space-between"
             alignItems="center"
           >
-            <CloseButton onClick={closeModal} disabled={isUploading} />
+            <CloseButton onClick={closeModal} disabled={isLoading} />
             <Typography variant="h3" fontSize="1.25rem" fontWeight="bold">
-              Upload new song
+              Edit Song
             </Typography>
           </Box>
           <Box
@@ -221,10 +198,10 @@ function SongUploader() {
                 type="submit"
                 variant="contained"
                 fullWidth
-                endIcon={<FileUploadRoundedIcon />}
-                disabled={isUploading}
+                endIcon={<ModeEditOutlineRoundedIcon />}
+                disabled={isLoading}
               >
-                {isUploading ? "Uploading..." : "upload song"}
+                {isLoading ? "Updating..." : "update song"}
               </Button>
             </Box>
           </Box>
@@ -233,4 +210,4 @@ function SongUploader() {
     </>
   );
 }
-export default SongUploader;
+export default EditSongPopup;

@@ -10,6 +10,15 @@ export interface Song {
   cover?: string;
 }
 
+export interface UpdateSongData {
+  id: string;
+  title: string;
+  artist: string;
+  genre: string;
+  cover: File | null | undefined;
+  audio: File | null | undefined;
+}
+
 export interface FilterOptions {
   title: string;
   artist: string;

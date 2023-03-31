@@ -11,7 +11,7 @@ import {
 import { Link as RLink } from "react-router-dom";
 import { unAuthNavLinks, authedNavLinks } from "../constants/navigation";
 import { useAuthContext } from "../context/AuthContext";
-import { resetMySongs } from "../store/features/mySongs";
+import { resetMySongs } from "../store/features/mySongsSlice";
 import { useAppDispatch } from "../store/store";
 import CloseButton from "./CloseButton";
 import ThemeToggleButton from "./ThemeToggleButton";

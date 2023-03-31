@@ -11,10 +11,10 @@ import ManagePage from "./pages/ManagePage";
 import AllSongsPage from "./pages/AllSongsPage";
 import PrivateRoute from "./pages/PrivateRoute";
 import { useEffect } from "react";
-import { fetchSongs } from "./store/features/songs";
+import { fetchSongs } from "./store/features/songsSlice";
 import { useAppDispatch } from "./store/store";
 import { useAuthContext } from "./context/AuthContext";
-import { fetchUserSongs } from "./store/features/mySongs";
+import { fetchUserSongs } from "./store/features/mySongsSlice";
 
 const router = createBrowserRouter([
   {

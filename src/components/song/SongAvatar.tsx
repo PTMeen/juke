@@ -1,4 +1,5 @@
 import { Avatar } from "@mui/material";
+import defaultCoverImg from "../../assets/images/default-music-cover.jpg";
 
 function SongAvatar({
   coverUrl,
@@ -7,24 +8,13 @@ function SongAvatar({
   coverUrl: string | undefined;
   title: string;
 }) {
-  if (coverUrl) {
-    return (
-      <Avatar
-        alt={title}
-        src={coverUrl}
-        variant="rounded"
-        sx={{ width: 100, height: 100 }}
-      />
-    );
-  }
-
   return (
     <Avatar
+      alt={title}
+      src={coverUrl || defaultCoverImg}
       variant="rounded"
-      sx={{ width: 100, height: 100, bgcolor: "primary.main", color: "white" }}
-    >
-      {title[0]}
-    </Avatar>
+      sx={{ width: 100, height: 100 }}
+    />
   );
 }
 export default SongAvatar;
