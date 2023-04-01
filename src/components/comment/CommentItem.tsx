@@ -1,15 +1,30 @@
 import { Box, Stack, Typography } from "@mui/material";
 import UserAvatar from "../UserAvatar";
 
-function CommentItem() {
+import { Comment } from "../../types/comment";
+import { formatTimeDistance } from "../../utils/time";
+
+interface Props {
+  comment: Comment;
+}
+
+function CommentItem({ comment }: Props) {
   return (
     <Box py={2} display="flex">
-      <UserAvatar src={null} username="Meen" />
+      <UserAvatar
+        src={comment.postedBy.photoURL}
+        username={comment.postedBy.displayName || "Anonymous"}
+      />
       <Box ml={2}>
-        <Typography variant="body2" gutterBottom>
-          Meen
-        </Typography>
-        <Typography variant="body1">I love this song</Typography>
+        <Stack direction="row" spacing={2} alignItems="center">
+          <Typography variant="body1" gutterBottom>
+            {comment.postedBy.displayName}
+          </Typography>
+          <Typography variant="body2" sx={{ opacity: 0.75 }}>
+            {formatTimeDistance(comment.postedAt)}
+          </Typography>
+        </Stack>
+        <Typography variant="subtitle2">{comment.content}</Typography>
       </Box>
     </Box>
   );
