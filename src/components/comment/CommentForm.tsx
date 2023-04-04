@@ -30,6 +30,7 @@ function CommentForm({ onSubmit, songId }: Props) {
     };
 
     onSubmit(newComment);
+    setComment("");
   };
 
   return (

@@ -132,7 +132,7 @@ function SongPage() {
   const uploadDateText = formatTimeDistance(song.uploadedAt);
 
   return (
-    <Box>
+    <Box pb={5}>
       <Box component="section">
         <Paper sx={{ p: 3 }}>
           <Stack direction="row" spacing={4}>

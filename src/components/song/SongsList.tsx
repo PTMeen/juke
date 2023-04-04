@@ -10,8 +10,8 @@ interface IProps {
 function SongsList({ songs }: IProps) {
   return (
     <Box>
-      {songs.map((song, index) => {
-        return <SongListItem key={index} {...song} />;
+      {songs.map((song) => {
+        return <SongListItem key={song.id} song={song} />;
       })}
     </Box>
   );
