@@ -1,4 +1,4 @@
-import { Box, Button, IconButton, Modal, Typography } from "@mui/material";
+import { Box, Button, Modal, Typography } from "@mui/material";
 import { ReactNode } from "react";
 
 const style = {

@@ -1,6 +1,4 @@
-import MoneyOffCsredRoundedIcon from "@mui/icons-material/MoneyOffCsredRounded";
 import { Box, Typography, Paper } from "@mui/material";
-import { SvgIconComponent } from "@mui/icons-material";
 
 interface IProps {
   title: string;

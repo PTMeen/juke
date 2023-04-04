@@ -1,5 +1,4 @@
 import { Box, CircularProgress } from "@mui/material";
-import { ReactNode } from "react";
 
 function PageSpinner() {
   return (

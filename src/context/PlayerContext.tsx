@@ -1,12 +1,5 @@
-import {
-  Dispatch,
-  ReactNode,
-  createContext,
-  useContext,
-  useMemo,
-  useState,
-} from "react";
-import { Howl, Howler } from "howler";
+import { ReactNode, createContext, useContext, useState } from "react";
+import { Howl } from "howler";
 import { Song } from "../types/song";
 
 type PlayerContextType = {

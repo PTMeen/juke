@@ -16,7 +16,7 @@ import PasswordInput from "./PasswordInput";
 import { AuthFormStatus, LoginFormData } from "../../types/auth";
 import { loginSchema } from "../../utils/formValidation";
 import { useState } from "react";
-import { signInWithEmailAndPassword, updateProfile } from "firebase/auth";
+import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../../firebase";
 import AuthFormAlert from "./AuthFormAlert";
 

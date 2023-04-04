@@ -4,7 +4,6 @@ import {
   signInWithRedirect,
   User,
   signOut,
-  UserInfo,
 } from "firebase/auth";
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { auth } from "../firebase";

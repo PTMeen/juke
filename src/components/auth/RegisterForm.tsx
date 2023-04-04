@@ -12,7 +12,6 @@ import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { useFormik } from "formik";
 import { useState } from "react";
 import { Link as RLink } from "react-router-dom";
-import { useAuthContext } from "../../context/AuthContext";
 import { auth } from "../../firebase";
 import { AuthFormStatus, RegisterFormData } from "../../types/auth";
 import { registerSchema } from "../../utils/formValidation";

@@ -19,7 +19,7 @@ import CloseButton from "../CloseButton";
 import ThumbnailUploader from "./ThumbnailUploader";
 import AudioUpload from "./AudioUpload";
 import ModeEditOutlineRoundedIcon from "@mui/icons-material/ModeEditOutlineRounded";
-import { useAppDispatch } from "../../store/store";
+
 import { db } from "../../firebase";
 import { doc, updateDoc } from "firebase/firestore";
 import { Song } from "../../types/song";
@@ -48,8 +48,6 @@ function EditSongPopup({ song }: Props) {
   const [file, setFile] = useState<File | null>(null);
   const [image, setImage] = useState<File | null>(null);
   const [isLoading, setIsLoading] = useState(false);
-
-  const dispatch = useAppDispatch();
 
   const openModal = (): void => {
     setIsModalOpen(true);
