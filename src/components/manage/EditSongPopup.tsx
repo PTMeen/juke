@@ -19,6 +19,7 @@ import CloseButton from "../CloseButton";
 import ThumbnailUploader from "./ThumbnailUploader";
 import AudioUpload from "./AudioUpload";
 import ModeEditOutlineRoundedIcon from "@mui/icons-material/ModeEditOutlineRounded";
+import { toast } from "react-hot-toast";
 
 import { db } from "../../firebase";
 import { doc, updateDoc } from "firebase/firestore";
@@ -88,7 +89,12 @@ function EditSongPopup({ song }: Props) {
       setIsLoading(false);
       setIsModalOpen(false);
       resetForm(null);
-      location.reload();
+
+      if (file || image) {
+        return location.reload();
+      }
+
+      toast.success("Song updated");
     } catch (error) {
       console.log(error);
       setIsLoading(false);

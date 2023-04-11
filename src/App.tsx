@@ -1,4 +1,5 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { Toaster } from "react-hot-toast";
 
 import HomePage from "./pages/HomePage";
 import SongPage from "./pages/SongPage";
@@ -80,6 +81,7 @@ function App() {
 
   return (
     <ColorModeProvider>
+      <Toaster />
       <RouterProvider router={router} />
     </ColorModeProvider>
   );
